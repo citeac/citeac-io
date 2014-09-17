@@ -4,6 +4,7 @@
 
 var mydb = require('mydb');
 var http = require('http').Server();
+var url = require('url').parse;
 
 var redis = process.env.REDIS;
 var secret = process.env.SECRET;
@@ -17,7 +18,7 @@ if (!secret) throw new Error('no secret');
  */
 
 mydb(http, {
-  redis: redis,
+  redis: url(redis).host,
   secret: secret
 });
 
