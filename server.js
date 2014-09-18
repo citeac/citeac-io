@@ -23,6 +23,19 @@ mydb(http, {
 });
 
 
+// cache and clean up listeners
+var listeners = http.listeners('request').slice();
+http.removeAllListeners('request');
+
+// add request handler
+http.on('request', function(req, res){
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
+  for (var i = 0, l = listeners.length; i < l; i++) {
+    listeners[i].call(http, req, res);
+  }
+});
+
 /**
  * Starting Server
  */
